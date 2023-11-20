@@ -1,0 +1,191 @@
+<form id="form">
+    <h2>Setplannr</h2>
+    <p>Generate song cards</p>
+    <section id="type-section">
+        <div class="input-group">
+            <label id="type-label" for="json">Type</label>
+            <select id="type" name="type">
+                <option value="spotify">Spotify</option>
+                <option value="soundcloud">Soundcloud</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+    </section>
+
+    <section id="url-section">
+        <div class="input-group">
+            <label id="url-label" for="url">Spotify Link</label>
+            <input id="url" name="url" type="text" placeholder="enter spotify link.." required />
+        </div>
+    </section>
+
+    <section id="custom-section" class="hidden">
+        <div class="input-group">
+            <label id="title-label" for="title">Title</label>
+            <input id="title" name="title" type="text" placeholder="enter song title..." />
+        </div>
+        <div class="input-group">
+            <label id="artist-label" for="artist">Artist</label>
+            <input id="artist" name="artist" type="text" placeholder="enter artist name..." />
+        </div>
+    </section>
+
+    <section id="buttons">
+        <button id="cancel" type="reset" class="hidden">Cancel</button>
+        <button id="submit" type="submit">Generate</button>
+    </section>
+</form>
+
+<script>
+    document.getElementById('form').onsubmit = (e) => {
+        e.preventDefault();
+        const type = document.getElementById('type').value;
+        const url = document.getElementById('url').value;
+        const title = document.getElementById('title').value;
+        const artist = document.getElementById('artist').value;
+        const request = JSON.stringify({ type, url, title, artist });
+        document.getElementById('form').reset();
+        parent.postMessage({ pluginMessage: { type: 'create-cards', request } }, '*')
+    }
+
+    document.getElementById('type').onchange = () => {
+        const type = document.getElementById('type').value;
+        const urlSection = document.getElementById('url-section');
+        const customSection = document.getElementById('custom-section');
+        if (type === 'custom') {
+            urlSection.classList.add('hidden');
+            customSection.classList.remove('hidden');
+            document.getElementById('url').required = false;
+            document.getElementById('title').required = true;
+            document.getElementById('artist').required = true;
+        } else {
+            urlSection.classList.remove('hidden');
+            customSection.classList.add('hidden');
+            document.getElementById('url').required = true;
+            document.getElementById('title').required = false;
+            document.getElementById('artist').required = false;
+
+            if (type === 'spotify') {
+                document.getElementById('url-label').innerHTML = 'Spotify Link';
+                document.getElementById('url').placeholder = 'enter spotify link...';
+            } else if (type === 'soundcloud') {
+                document.getElementById('url-label').innerHTML = 'Soundcloud Link';
+                document.getElementById('url').placeholder = 'enter soundcloud link...';
+            }
+        }
+    }
+
+    document.getElementById('url').focus();
+</script>
+
+<style>
+    body {
+        box-sizing: border-box;
+        margin: 0;
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: #121212;
+        color: #fff;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    p {
+        margin: 0;
+        margin-bottom: 1rem;
+        font-size: 0.75rem;
+        color: #989898;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .input-group {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input-group label {
+        margin-bottom: 0.5rem;
+    }
+
+    .input-group input,
+    .input-group select {
+        padding: 0.5rem;
+        border: 1px solid #000000;
+        border-radius: 4px;
+        background-color: #232323;
+        color: #fff;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+        outline: none;
+        border-color: #1ED760;
+    }
+
+    .input-group input::placeholder,
+    .input-group select::placeholder {
+        color: #989898;
+    }
+
+    #form {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        height: 90%;
+    }
+
+    #buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: auto;
+    }
+
+    #buttons button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    #buttons button + button {
+        margin-left: 0.5rem;
+    }
+
+    #buttons button:focus {
+        outline: none;
+    }
+
+    #cancel {
+        background-color: #b52b2b;
+    }
+
+    #cancel:hover {
+        transform: scale(1.05);
+    }
+
+    #cancel:active {
+        background-color: #f55353;
+    }
+
+    #submit {
+        background-color: #1ED760;
+    }
+
+    #submit:hover {
+        transform: scale(1.05);
+    }
+
+    #submit:active {
+        background-color: #127F39;
+    }
+</style>

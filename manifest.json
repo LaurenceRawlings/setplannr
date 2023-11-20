@@ -1,0 +1,13 @@
+{
+    "name": "setplannr",
+    "id": "1244731090093040770",
+    "api": "1.0.0",
+    "main": "code.js",
+    "capabilities": [],
+    "enableProposedApi": false,
+    "editorType": ["figma", "figjam"],
+    "ui": "ui.html",
+    "networkAccess": {
+        "allowedDomains": ["*.scdn.co", "*.sndcdn.com", "*.spotify.com", "soundcloud.com"]
+    }
+}
